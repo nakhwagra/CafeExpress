@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kelola Menu - Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Kelola Menu</h1>
+
+    <!-- Tabel daftar menu -->
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Nama Menu</th>
+                <th>Harga</th>
+                <th>Deskripsi</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="menu : ${menus}">
+                <td th:text="${menu.nama}">Nama Menu</td>
+                <td th:text="${menu.harga}">Harga</td>
+                <td th:text="${menu.deskripsi}">Deskripsi</td>
+                <td>
+                    <a th:href="@{/admin/menu/edit/{id}(id=${menu.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{/admin/menu/delete/{id}(id=${menu.id})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Yakin ingin menghapus menu ini?')">Hapus</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <!-- Form tambah menu baru -->
+    <h3>Tambah Menu Baru</h3>
+    <form th:action="@{/admin/menu_list/add}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="mb-3">
+            <label for="nama" class="form-label">Nama Menu</label>
+            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama menu" required />
+        </div>
+        <div class="mb-3">
+            <label for="harga" class="form-label">Harga</label>
+            <input type="number" class="form-control" id="harga" name="harga" placeholder="Masukkan harga" required />
+        </div>
+        <div class="mb-3">
+            <label for="deskripsi" class="form-label">Deskripsi</label>
+            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" placeholder="Deskripsi menu" required></textarea>
+        </div>
+        <div>
+            <input type="file" name="gambar" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn btn-success">Tambah Menu</button>
+    </form>
+</div>
+</body>
+</html>
