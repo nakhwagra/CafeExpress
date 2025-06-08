@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.file.*;
 
 import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/menu_list")
@@ -34,7 +35,8 @@ public class AdminMenuController {
     public String addMenu(@RequestParam String nama,
                           @RequestParam double harga,
                           @RequestParam String deskripsi,
-                          @RequestParam("gambar") MultipartFile gambarFile) throws IOException {
+                          @RequestParam("gambar") MultipartFile gambarFile,
+                          RedirectAttributes redirectAttributes) throws IOException {
 
         Menu menu = new Menu();
         menu.setNama(nama);
@@ -44,6 +46,7 @@ public class AdminMenuController {
         if (!gambarFile.isEmpty()) {
             String originalFileName = gambarFile.getOriginalFilename();
             String fileName = StringUtils.cleanPath(originalFileName != null ? originalFileName : "default-coffe.jpg");
+
             Path uploadDir = Paths.get("images"); // folder uploads di project root, bisa diubah sesuai kebutuhan
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
@@ -56,6 +59,32 @@ public class AdminMenuController {
     }
 
         menuRepository.save(menu);
+        redirectAttributes.addFlashAttribute("success", "Menu berhasil ditambahkan!");
+        return "redirect:/admin/menu_list";
+    }
+
+    @PostMapping("/edit")
+    public String editMenu(@RequestParam Long id,
+                        @RequestParam String nama,
+                        @RequestParam double harga,
+                        @RequestParam String deskripsi,
+                        RedirectAttributes redirectAttributes) {
+        Menu menu = menuRepository.findById(id).orElse(null);
+        if (menu != null) {
+            menu.setNama(nama);
+            menu.setHarga(harga);
+            menu.setDeskripsi(deskripsi);
+            menuRepository.save(menu);
+            redirectAttributes.addFlashAttribute("success", "Menu berhasil diperbarui!");
+        }
+        return "redirect:/admin/menu_list";
+    }
+
+    // Handle delete menu
+    @GetMapping("/delete/{id}")
+    public String deleteMenu(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        menuRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Menu berhasil dihapus!");
         return "redirect:/admin/menu_list";
     }
 

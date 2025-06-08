@@ -45,7 +45,7 @@ public class MenuController {
         return "menu_detail";
     }
 
-    @PostMapping("/order")
+    @PostMapping("/menu/order")
     public String buatOrder(@RequestParam Long menuId,
                             @RequestParam int jumlah,
                             Principal principal) {
