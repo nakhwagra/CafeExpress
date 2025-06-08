@@ -1,0 +1,167 @@
+/* Warna tema dark kopi (sama dengan halaman menu) */
+:root {
+    --primary: #6f4e37;     /* coklat kopi */
+    --secondary: #d9b08c;   /* krem latte */
+    --accent: #a47148;      /* kayu */
+    --background: #1f1f1f;
+    --card-bg: #2a2a2a;
+    --text-light: #ffffff;
+    --text-muted: #ccc;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-light);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Bootstrap Override */
+.navbar-dark {
+    background-color: var(--primary);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--text-light);
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.navbar-dark .nav-link.active,
+.navbar-dark .nav-link:hover {
+    color: var(--secondary);
+}
+
+/* Container utama keranjang */
+.container {
+    padding-top: 2rem;
+}
+
+/* Judul */
+h2 {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+/* Tabel keranjang */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+table thead tr {
+    background-color: var(--primary);
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+table thead th {
+    padding: 10px 15px;
+    border-radius: 10px 10px 0 0;
+}
+
+table tbody tr {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    transition: background-color 0.3s;
+}
+
+table tbody tr:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+table tbody td {
+    padding: 12px 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Tombol + dan - */
+button.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-weight: 700;
+}
+
+button.btn-warning {
+    background-color: var(--secondary);
+    border: none;
+    color: #000;
+    transition: background-color 0.3s;
+}
+
+button.btn-warning:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+button.btn-success {
+    background-color: var(--primary);
+    border: none;
+    color: var(--text-light);
+    transition: background-color 0.3s;
+}
+
+button.btn-success:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+/* Total bayar */
+h4 {
+    margin-top: 2rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+/* Tombol checkout */
+form > button.btn-primary {
+    background-color: var(--primary);
+    border: none;
+    color: var(--text-light);
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+}
+
+form > button.btn-primary:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    table thead {
+        display: none;
+    }
+    table, tbody, tr, td {
+        display: block;
+        width: 100%;
+    }
+    table tbody tr {
+        margin-bottom: 1rem;
+        border-radius: 10px;
+    }
+    table tbody td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+    table tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        padding-left: 10px;
+        font-weight: 600;
+        text-align: left;
+        color: var(--secondary);
+    }
+}
