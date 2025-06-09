@@ -74,9 +74,7 @@
         </table>
 
         <h4>Total Bayar: Rp <span th:text="${total}">0</span></h4>
-        <form th:action="@{/cart/checkout}" method="post">
-            <button class="btn btn-primary">Checkout</button>
-        </form>
+        <a th:href="@{/cart/checkout}" class="btn btn-primary">Checkout</a>
     </div>
 
     <!-- Bootstrap JS (opsional, untuk navbar collapse di mobile) -->

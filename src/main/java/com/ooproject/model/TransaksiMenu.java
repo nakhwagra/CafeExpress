@@ -15,11 +15,11 @@ public class TransaksiMenu {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "transaksi_id")
+    @JoinColumn(name = "transaksi_id", nullable = false)
     private Transaksi transaksi;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id")
+    @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
     private int jumlah;

@@ -1,7 +1,12 @@
 package com.ooproject.controller;
 
+import com.ooproject.model.FavoriteStatus;
+import com.ooproject.model.Kategori;
 import com.ooproject.model.Menu;
+import com.ooproject.model.TransaksiMenu;
 import com.ooproject.repository.MenuRepository;
+import com.ooproject.repository.TransaksiMenuRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +20,17 @@ import java.nio.file.*;
 import java.util.List;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.transaction.Transactional;
+
 @Controller
 @RequestMapping("/admin/menu_list")
 public class AdminMenuController {
 
     @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private TransaksiMenuRepository transaksiMenuRepository;
 
     // Tampilkan halaman kelola menu
     @GetMapping
@@ -36,12 +46,20 @@ public class AdminMenuController {
                           @RequestParam double harga,
                           @RequestParam String deskripsi,
                           @RequestParam("gambar") MultipartFile gambarFile,
+                          @RequestParam(required = false) String favorite,
                           RedirectAttributes redirectAttributes) throws IOException {
 
         Menu menu = new Menu();
         menu.setNama(nama);
         menu.setHarga(harga);
         menu.setDeskripsi(deskripsi);
+
+        // Konversi manual ke enum dengan fallback jika invalid/null
+        try {
+            menu.setFavorite(FavoriteStatus.valueOf(favorite != null ? favorite : "NO"));
+        } catch (IllegalArgumentException e) {
+            menu.setFavorite(FavoriteStatus.NO);
+        }
 
         if (!gambarFile.isEmpty()) {
             String originalFileName = gambarFile.getOriginalFilename();
@@ -68,12 +86,26 @@ public class AdminMenuController {
                         @RequestParam String nama,
                         @RequestParam double harga,
                         @RequestParam String deskripsi,
+                        @RequestParam(required = false) String favorite,
+                        @RequestParam String kategori,
                         RedirectAttributes redirectAttributes) {
         Menu menu = menuRepository.findById(id).orElse(null);
         if (menu != null) {
             menu.setNama(nama);
             menu.setHarga(harga);
             menu.setDeskripsi(deskripsi);
+
+             try {
+                menu.setFavorite(FavoriteStatus.valueOf(favorite != null ? favorite : "NO"));
+            } catch (IllegalArgumentException e) {
+                menu.setFavorite(FavoriteStatus.NO);
+            }
+
+            try {
+                menu.setKategori(Kategori.valueOf(kategori));
+            } catch (IllegalArgumentException e) {
+                menu.setKategori(Kategori.COFFEE);
+            }
             menuRepository.save(menu);
             redirectAttributes.addFlashAttribute("success", "Menu berhasil diperbarui!");
         }
@@ -81,10 +113,26 @@ public class AdminMenuController {
     }
 
     // Handle delete menu
+    @Transactional
     @GetMapping("/delete/{id}")
     public String deleteMenu(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        menuRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Menu berhasil dihapus!");
+        try {
+            // if(!menuRepository.existsById(id)) {
+            //     redirectAttributes.addFlashAttribute("error", "Menu tidak ditemukan.");
+            //     return "redirect:/admin/menu_list";
+            // }
+
+            // Ambil data transaksi terkait
+            List<TransaksiMenu> daftar = transaksiMenuRepository.findByMenuId(id);
+            if(daftar != null && !daftar.isEmpty()) {
+                transaksiMenuRepository.deleteAll(daftar);
+            }
+            menuRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Menu berhasil dihapus!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Gagal menghapus menu. Mungkin sedang digunakan di data transaksi.");
+            e.printStackTrace(); // log ke console
+        }
         return "redirect:/admin/menu_list";
     }
 

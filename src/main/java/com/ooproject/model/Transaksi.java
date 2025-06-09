@@ -21,6 +21,14 @@ public class Transaksi {
 
     @OneToMany(mappedBy = "transaksi", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransaksiMenu> transaksiMenus;
+
+    @Column(name = "alamat", length = 255)
+    private String alamat;
+
+    @Column(name = "metode_pembayaran", length = 50)
+    private String metodePembayaran;
+
+    // + getter dan setter
     
 
 
@@ -45,4 +53,28 @@ public class Transaksi {
 
     public Double getTotal() { return total; }
     public void setTotal(Double total) { this.total = total; }
+
+    public List<TransaksiMenu> getTransaksiMenus() {
+        return transaksiMenus;
+    }
+
+    public void setTransaksiMenus(List<TransaksiMenu> transaksiMenus) {
+        this.transaksiMenus = transaksiMenus;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getMetodePembayaran() {
+        return metodePembayaran;
+    }
+
+    public void setMetodePembayaran(String metodePembayaran) {
+        this.metodePembayaran = metodePembayaran;
+    }
 }

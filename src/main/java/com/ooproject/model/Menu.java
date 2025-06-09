@@ -17,6 +17,11 @@ public class Menu {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransaksiMenu> transaksiMenus;
 
+    @Enumerated(EnumType.STRING)
+    private FavoriteStatus favorite = FavoriteStatus.NO;
+
+    @Enumerated(EnumType.STRING)
+    private Kategori kategori;
 
     // Constructors
     public Menu() {}
@@ -50,6 +55,22 @@ public class Menu {
 
     public void setTransaksiMenus(List<TransaksiMenu> transaksiMenus) {
         this.transaksiMenus = transaksiMenus;
+    }
+
+    public FavoriteStatus getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(FavoriteStatus favorite) {
+        this.favorite = favorite;
+    }
+
+    public Kategori getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(Kategori kategori) {
+        this.kategori = kategori;
     }
 
 }

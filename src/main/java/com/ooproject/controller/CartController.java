@@ -136,4 +136,60 @@ public class CartController {
         return "redirect:/success";
     }
 
+    @GetMapping("/cart/checkout")
+    public String showCheckoutForm(@ModelAttribute("cart") List<CartItem> cart, Model model) {
+        double total = cart.stream().mapToDouble(CartItem::getTotalHarga).sum();
+        model.addAttribute("total", total);
+        return "checkout";
+    }
+
+    @PostMapping("/cart/submit-checkout")
+    @Transactional
+    public String submitCheckout(@ModelAttribute("cart") List<CartItem> cart,
+                                @RequestParam String alamat,
+                                @RequestParam String metodePembayaran,
+                                Principal principal) {
+
+        System.out.println("===> Mulai submitCheckout");
+        System.out.println("Alamat: " + alamat);
+        System.out.println("Metode Pembayaran: " + metodePembayaran);
+        
+        if (principal == null) {
+            System.out.println("===> principal null");
+            return "redirect:/login";
+        }
+
+        Customer customer = customerRepository.findByUsername(principal.getName());
+        if (customer == null) {
+            System.out.println("===> customer null");
+            return "redirect:/error";
+        }
+
+        Transaksi transaksi = new Transaksi();
+        transaksi.setCustomer(customer);
+        transaksi.setTanggal(LocalDateTime.now());
+        transaksi.setTotal(cart.stream().mapToDouble(CartItem::getTotalHarga).sum());
+        transaksi.setAlamat(alamat); // Pastikan field ini ada di entity Transaksi
+        transaksi.setMetodePembayaran(metodePembayaran); // Pastikan juga ini ada
+        transaksi = transaksiRepository.save(transaksi);
+        System.out.println("===> Transaksi ID: " + transaksi.getId());
+
+        for (CartItem item : cart) {
+            TransaksiMenu transaksiMenu = new TransaksiMenu();
+            transaksiMenu.setMenu(item.getMenu());
+            transaksiMenu.setJumlah(item.getJumlah());
+            transaksiMenu.setTransaksi(transaksi);
+            transaksiMenuRepository.save(transaksiMenu);
+        }
+
+        cart.clear();
+        System.out.println("===> Checkout selesai");
+        return "redirect:/success";
+    }
+
+    @GetMapping("/success")
+    public String showSuccessPage() {
+        return "success";
+    }
+
 }

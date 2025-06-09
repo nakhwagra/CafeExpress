@@ -24,7 +24,126 @@
     <main class="container py-5">
     <h2 class="text-center mb-4">Daftar Menu</h2>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- Menu Favorit -->
+    <div>
+        <h3 class="mb-3">🔥 Menu Favorit</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <div class="col" th:each="menu : ${favoritMenus}">
+                <div class="card h-100 shadow-sm border-danger">
+                    <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
+                        <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
+                        <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailModal"
+                                    th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-gambar=${menu.gambar}">
+                                Lihat Detail
+                            </button>
+                            <form th:action="@{/cart/add}" method="post">
+                                <input type="hidden" name="menuId" th:value="${menu.id}" />
+                                <button type="submit" class="btn btn-success">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigasi Kategori -->
+    <div class="mb-4">
+        <h4>📌 Kategori</h4>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-dark" th:each="kategori : ${kategoris}"
+               th:href="'#' + ${kategori.replaceAll(' ', '')}" th:text="${kategori}"></a>
+        </div>
+    </div>
+
+    <!-- Menu Berdasarkan Kategori -->
+    <div th:each="entry : ${menuPerKategori}">
+        <h3 class="mt-5 mb-3" th:attr="id=${entry.key.replaceAll(' ', '')}" th:text="${entry.key}"></h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="menu : ${entry.value}">
+                <div class="card h-100 shadow-sm">
+                    <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
+                        <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
+                        <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailModal"
+                                    th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-gambar=${menu.gambar}">
+                                Lihat Detail
+                            </button>
+                            <form th:action="@{/cart/add}" method="post">
+                                <input type="hidden" name="menuId" th:value="${menu.id}" />
+                                <button type="submit" class="btn btn-success">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Detail -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-light">
+      <div class="modal-header text-dark">
+        <h5 class="modal-title" id="detailModalLabel">Detail Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark">
+        <img id="modalGambar" src="" alt="Gambar Menu" class="img-fluid rounded mb-3 shadow" />
+        <h5 id="modalNama" class="fw-bold"></h5>
+        <p id="modalHarga" class="fw-semibold"></p>
+        <p id="modalDeskripsi"></p>
+      </div>
+      <div class="modal-footer text-dark">
+        <form th:action="@{/cart/add}" method="post" id="orderForm">
+            <input type="hidden" name="menuId" id="modalMenuId" />
+            <button type="submit" class="btn btn-success">Add to Cart</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var detailModal = document.getElementById('detailModal');
+
+        detailModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            if (!button) return;
+
+            var id = button.getAttribute('data-id');
+            var nama = button.getAttribute('data-nama');
+            var harga = button.getAttribute('data-harga');
+            var deskripsi = button.getAttribute('data-deskripsi');
+            var gambar = button.getAttribute('data-gambar');
+
+            document.getElementById('modalNama').textContent = nama;
+            document.getElementById('modalHarga').textContent = 'Rp ' + harga;
+            document.getElementById('modalDeskripsi').textContent = deskripsi;
+            document.getElementById('modalGambar').src = '/images/' + gambar;
+            document.getElementById('modalMenuId').value = id;
+        });
+    });
+</script>
+</body>
+</html>
+
+    {% comment %} <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" th:each="menu : ${menus}">
             <div class="card h-100 shadow-sm">
                 <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
@@ -102,4 +221,4 @@
     })
 </script>
 </body>
-</html>
+</html> {% endcomment %}

@@ -25,6 +25,32 @@
 <div class="container mt-4">
     <h1>Kelola Menu</h1>
 
+    <!-- Filter Favorite dan Kategori -->
+    <form method="get" th:action="@{/admin/menu_list}" class="mb-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="favoriteFilter" class="col-form-label">Filter Favorite:</label>
+                <select name="favorite" id="favoriteFilter" class="form-select">
+                    <option value="">Semua</option>
+                    <option value="YES" th:selected="${param.favorite == 'YES'}">Favorite</option>
+                    <option value="NO" th:selected="${param.favorite == 'NO'}">Biasa</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="kategoriFilter" class="col-form-label">Filter Kategori:</label>
+                <select name="kategori" id="kategoriFilter" class="form-select">
+                    <option value="">Semua</option>
+                    <option value="COFFEE" th:selected="${param.kategori == 'COFFEE'}">Coffee</option>
+                    <option value="NON_COFFEE" th:selected="${param.kategori == 'NON_COFFEE'}">Non-Coffee</option>
+                    <option value="DESSERT" th:selected="${param.kategori == 'DESSERT'}">Dessert</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Terapkan</button>
+            </div>
+        </div>
+    </form>
+
     <!-- Tabel daftar menu -->
     <table class="table table-bordered mt-4">
         <thead>
@@ -33,6 +59,8 @@
                 <th>Nama Menu</th>
                 <th>Harga</th>
                 <th>Deskripsi</th>
+                <th>Favorite</th>
+                <th>Kategori</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -44,13 +72,15 @@
                 <td th:text="${menu.nama}">Nama Menu</td>
                 <td th:text="${menu.harga}">Harga</td>
                 <td th:text="${menu.deskripsi}">Deskripsi</td>
+                <td th:text="${menu.favorite}">NO</td>
+                <td th:text="${menu.kategori}">Kategori</td>
                 <td>
                     <button
                         class="btn btn-warning btn-sm btn-edit"
-                        th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}">
+                        th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-favorite=${menu.favorite}, data-kategori=${menu.kategori}">
                         Edit
                     </button>
-                    <a  th:href="@{/admin/menu_list/delete/{id}(id=${menu.id})}" class"btn btn-danger btn-sm"
+                    <a  th:href="@{/admin/menu_list/delete/{id}(id=${menu.id})}" class="btn btn-danger btn-sm"
                         onclick="return confirm('Yakin ingin menghapus menu ini?')">Hapus</a>
                 </td>
             </tr>
@@ -75,6 +105,21 @@
                 <label for="edit-deskripsi" class="form-label">Deskripsi</label>
                 <textarea class="form-control" id="edit-deskripsi" name="deskripsi" rows="3" required></textarea>
             </div>
+            <div class="mb-3">
+                <label for="edit-favorite" class="form-label">Favorite</label>
+                <select class="form-control" id="edit-favorite" name="favorite">
+                    <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="edit-kategori" class="form-label">Kategori</label>
+                <select class="form-control" id="edit-kategori" name="kategori">
+                    <option value="COFFEE">Coffee</option>
+                    <option value="NON_COFFEE">Non-Coffee</option>
+                    <option value="DESSERT">Dessert</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
         </form>
         <hr/>
@@ -96,6 +141,21 @@
             <label for="deskripsi" class="form-label">Deskripsi</label>
             <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" placeholder="Deskripsi menu" required></textarea>
         </div>
+        <div class="mb-3">
+            <label for="favorite" class="form-label">Favorite</label>
+            <select class="form-control" id="favorite" name="favorite">
+                <option value="YES">Yes</option>
+                <option value="NO" selected>No</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="kategori" class="form-label">Kategori</label>
+            <select class="form-control" id="kategori" name="kategori" required>
+                <option value="COFFEE">Coffee</option>
+                <option value="NON_COFFEE">Non-Coffee</option>
+                <option value="DESSERT">Dessert</option>
+            </select>
+        </div>
         <div>
             <input type="file" name="gambar" accept="image/*" required>
         </div>
@@ -111,11 +171,15 @@
             const nama = button.getAttribute('data-nama');
             const harga = button.getAttribute('data-harga');
             const deskripsi = button.getAttribute('data-deskripsi');
+            const favorite = button.getAttribute('data-favorite');
+            const kategori = button.getAttribute('data-kategori');
 
             document.getElementById('edit-id').value = id;
             document.getElementById('edit-nama').value = nama;
             document.getElementById('edit-harga').value = harga;
             document.getElementById('edit-deskripsi').value = deskripsi;
+            document.getElementById('edit-favorite').value = favorite;
+            document.getElementById('edit-kategori').value = kategori;
 
             document.getElementById('edit-form').style.display = 'block';
             document.getElementById('edit-form').scrollIntoView({ behavior: 'smooth' });
