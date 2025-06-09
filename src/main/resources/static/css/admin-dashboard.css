@@ -1,0 +1,64 @@
+/* Wrapper utama */
+#wrapper {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sidebar */
+#sidebar-wrapper {
+    width: 220px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Heading sidebar */
+#sidebar-wrapper .sidebar-heading {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Link sidebar */
+#sidebar-wrapper .list-group-item {
+    border: none;
+    padding: 20px 30px;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+    background-color: #495057;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Konten utama */
+#page-content-wrapper {
+    margin-left: 220px;
+}
+
+/* Card style */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+    #page-content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* Tombol logout full width di mobile */
+@media (max-width: 576px) {
+    #sidebar-wrapper .btn {
+        width: 100% !important;
+    }
+}

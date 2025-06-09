@@ -14,6 +14,17 @@ public abstract class User { //super class
     private String password;
     private String role;
 
+    // @OneToOne
+    // @JoinColumn(name= "customer_id")
+    // private Customer customer;
+
+    // public Customer getCustomer() {
+    //     return customer;
+    // }
+    // public void setCustomer(Customer customer) {
+    //     this.customer = customer;
+    // }
+
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { 

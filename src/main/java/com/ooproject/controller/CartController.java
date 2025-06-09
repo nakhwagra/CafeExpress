@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.ui.Model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ooproject.model.CartItem;
 import com.ooproject.model.Customer;
 import com.ooproject.model.Menu;
+import com.ooproject.model.User;
 import com.ooproject.model.Transaksi;
 import com.ooproject.model.TransaksiMenu;
+import com.ooproject.repository.CustomerRepository;
 import com.ooproject.repository.MenuRepository;
 import com.ooproject.repository.TransaksiMenuRepository;
 import com.ooproject.repository.TransaksiRepository;
+import com.ooproject.repository.UserRepository;
+
 
 
 @Controller
@@ -36,6 +43,12 @@ public class CartController {
 
     @Autowired
     private TransaksiMenuRepository transaksiMenuRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @ModelAttribute("cart")
     public List<CartItem> initCart() {
@@ -96,14 +109,15 @@ public class CartController {
     }
 
     @PostMapping("/cart/checkout")
-    public String checkout(@ModelAttribute("cart") List<CartItem> cart, 
-                           Principal principal) {
-        // Simulasi customer login
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setName("Dummy");
+    @Transactional
+    public String checkout(@ModelAttribute("cart") List<CartItem> cart, Principal principal) {
+        if (principal == null) return "redirect:/login";
 
-        // Buat transaksi
+        Customer customer = customerRepository.findByUsername(principal.getName());
+        if (customer == null) {
+            return "redirect:/error";
+        }
+
         Transaksi transaksi = new Transaksi();
         transaksi.setCustomer(customer);
         transaksi.setTanggal(LocalDateTime.now());
@@ -118,7 +132,8 @@ public class CartController {
             transaksiMenuRepository.save(transaksiMenu);
         }
 
-        cart.clear(); // kosongkan keranjang
+        cart.clear();
         return "redirect:/success";
-    }   
+    }
+
 }
