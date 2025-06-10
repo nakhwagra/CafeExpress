@@ -13,7 +13,7 @@
         <nav>
             <a href="/" th:href="@{/}">Home</a>
             <a href="/menu" th:href="@{/menu}">Menu</a>
-            <a href="/cart" th:href"@{/cart}" class="btn btn-outline-light ms-2">🛒 Keranjang</a>
+            <a href="/cart" th:href"@{/cart}" class="btn btn-outline-light ms-2">🛒</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-link text-white text-decoration-none" style="padding: 0; margin: 0; background: none; border: none;">Logout</button>
             </form>
@@ -25,7 +25,7 @@
     <h2 class="text-center mb-4">Daftar Menu</h2>
 
     <!-- Menu Favorit -->
-    <div>
+    <div class="section-box">
         <h3 class="mb-3">🔥 Menu Favorit</h3>
         <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
             <div class="col" th:each="menu : ${favoritMenus}">
@@ -35,7 +35,7 @@
                         <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
                         <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
                         <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="button-group">
                             <button type="button" class="btn btn-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#detailModal"
@@ -54,8 +54,8 @@
     </div>
 
     <!-- Navigasi Kategori -->
-    <div class="mb-4">
-        <h4>📌 Kategori</h4>
+    <div class="section-box kategori-nav">
+        <h4 class="mb-2">📌 Kategori</h4>
         <div class="d-flex flex-wrap gap-2">
             <a class="btn btn-outline-dark" th:each="kategori : ${kategoris}"
                th:href="'#' + ${kategori.replaceAll(' ', '')}" th:text="${kategori}"></a>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Menu Berdasarkan Kategori -->
-    <div th:each="entry : ${menuPerKategori}">
+    <div th:each="entry : ${menuPerKategori}" class="section-box">
         <h3 class="mt-5 mb-3" th:attr="id=${entry.key.replaceAll(' ', '')}" th:text="${entry.key}"></h3>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col" th:each="menu : ${entry.value}">
