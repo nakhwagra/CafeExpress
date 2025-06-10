@@ -92,7 +92,7 @@ public class MenuController {
         // Buat transaksi
         Transaksi transaksi = new Transaksi();
         transaksi.setTanggal(LocalDateTime.now());
-        transaksi.setCustomer(customer);
+        // transaksi.setCustomer(customer);
         transaksi.setTotal(menu.getHarga() * jumlah);
         transaksi = transaksiRepository.save(transaksi);
 

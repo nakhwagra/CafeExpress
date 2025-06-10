@@ -20,7 +20,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers("/menu/add", "/menu/edit/**", "/menu/delete/**").hasRole("ADMIN")
 
             // Akses hanya untuk USER
-            .requestMatchers("/menu/**","/order/**").hasRole("USER")
+            .requestMatchers("/menu/**","/order/**", "/cart", "/cart/**").hasRole("USER")
 
             // Bisa diakses oleh ADMIN & USER
             .requestMatchers("/menu", "/menu/**").hasAnyRole("USER", "ADMIN")

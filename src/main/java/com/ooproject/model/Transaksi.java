@@ -15,7 +15,9 @@ public class Transaksi {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Customer customer;
+    private User user;
+
+    // private Customer customer;
 
     private Double total;
 
@@ -35,9 +37,9 @@ public class Transaksi {
     // Constructors
     public Transaksi() {}
 
-    public Transaksi(LocalDateTime tanggal, Customer customer, Double total) {
+    public Transaksi(LocalDateTime tanggal, Double total) {
         this.tanggal = tanggal;
-        this.customer = customer;
+        // this.customer = customer;
         this.total = total;
     }
 
@@ -48,8 +50,8 @@ public class Transaksi {
     public LocalDateTime getTanggal() { return tanggal; }
     public void setTanggal(LocalDateTime tanggal) { this.tanggal = tanggal; }
 
-    public Customer getCustomer() { return customer; }
-    public void setCustomer(Customer customer) { this.customer = customer; }
+    // public Customer getCustomer() { return customer; }
+    // public void setCustomer(Customer customer) { this.customer = customer; }
 
     public Double getTotal() { return total; }
     public void setTotal(Double total) { this.total = total; }

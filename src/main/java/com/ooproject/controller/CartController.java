@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,14 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ooproject.model.CartItem;
 import com.ooproject.model.Customer;
 import com.ooproject.model.Menu;
-import com.ooproject.model.User;
 import com.ooproject.model.Transaksi;
 import com.ooproject.model.TransaksiMenu;
 import com.ooproject.repository.CustomerRepository;
 import com.ooproject.repository.MenuRepository;
 import com.ooproject.repository.TransaksiMenuRepository;
 import com.ooproject.repository.TransaksiRepository;
-import com.ooproject.repository.UserRepository;
+// import com.ooproject.repository.UserRepository;
 
 
 
@@ -44,8 +42,8 @@ public class CartController {
     @Autowired
     private TransaksiMenuRepository transaksiMenuRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    // @Autowired
+    // private UserRepository userRepository;
     
     @Autowired
     private CustomerRepository customerRepository;
@@ -119,7 +117,7 @@ public class CartController {
         }
 
         Transaksi transaksi = new Transaksi();
-        transaksi.setCustomer(customer);
+        // transaksi.setCustomer(customer);
         transaksi.setTanggal(LocalDateTime.now());
         transaksi.setTotal(cart.stream().mapToDouble(CartItem::getTotalHarga).sum());
         transaksi = transaksiRepository.save(transaksi);
@@ -154,23 +152,32 @@ public class CartController {
         System.out.println("Alamat: " + alamat);
         System.out.println("Metode Pembayaran: " + metodePembayaran);
         
-        if (principal == null) {
-            System.out.println("===> principal null");
-            return "redirect:/login";
+        if (principal == null) return "redirect:/login";
+        
+        if (cart == null || cart.isEmpty()) {
+            System.out.println("===> Cart kosong!");
+            return "redirect:/cart";
         }
 
         Customer customer = customerRepository.findByUsername(principal.getName());
-        if (customer == null) {
-            System.out.println("===> customer null");
-            return "redirect:/error";
-        }
+        if (customer == null) return "redirect:/error";
 
         Transaksi transaksi = new Transaksi();
-        transaksi.setCustomer(customer);
+        // transaksi.setCustomer(customer);
         transaksi.setTanggal(LocalDateTime.now());
-        transaksi.setTotal(cart.stream().mapToDouble(CartItem::getTotalHarga).sum());
+        // transaksi.setTotal(cart.stream().mapToDouble(CartItem::getTotalHarga).sum());
         transaksi.setAlamat(alamat); // Pastikan field ini ada di entity Transaksi
         transaksi.setMetodePembayaran(metodePembayaran); // Pastikan juga ini ada
+
+        double total = cart.stream().mapToDouble(CartItem::getTotalHarga).sum();
+        if (total <= 0) {
+            System.out.println("===> Total tidak valid : " + total);
+            return "redirect:/cart";
+        }
+
+        transaksi.setTotal(total);
+
+        System.out.println("===> Menyimpan transaksi...");
         transaksi = transaksiRepository.save(transaksi);
         System.out.println("===> Transaksi ID: " + transaksi.getId());
 
@@ -183,7 +190,7 @@ public class CartController {
         }
 
         cart.clear();
-        System.out.println("===> Checkout selesai");
+        // System.out.println("===> Checkout selesai");
         return "redirect:/success";
     }
 
