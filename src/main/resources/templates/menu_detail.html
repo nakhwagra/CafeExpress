@@ -1,22 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Detail Menu</title>
+    <meta charset="UTF-8">
+    <title th:text="${menu.nama} + ' - Detail Menu'"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <style>
+        /* Gaya tambahan untuk halaman detail menu (tetap sama) */
+        body {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .detail-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #2b2c3b;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+        .detail-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .detail-container h2 {
+            color: #ffc107;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .detail-container p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        .detail-container .price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #a9746e;
+            margin-bottom: 20px;
+        }
+        .detail-container label {
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+        .detail-container input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+        }
+        .btn-order {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-order:hover {
+            background-color: #218838;
+        }
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2 th:text="${menu.nama}">Nama Menu</h2>
-    <p th:text="'Harga: Rp' + ${menu.harga}"></p>
-    <p th:text="'Deskripsi: ' + ${menu.deskripsi}"></p>
-    <img th:src="@{/images/{img}(img=${menu.gambar})}" alt="Menu Image" style="width:300px; border-radius: 12px;"/>
+    <div class="container detail-container">
+        <h2 th:text="${menu.nama}">Nama Menu</h2>
+        <img th:src="@{/images/{img}(img=${menu.gambar})}" alt="Menu Image"/>
+        <p class="price" th:text="'Harga: Rp ' + ${menu.harga}"></p>
+        <p th:text="${menu.deskripsi}"></p>
 
-    <form th:action="@{/order}" method="post">
-        <input type="hidden" name="menuId" th:value="${menu.id}"/>
-        <label for="jumlah">Jumlah:</label>
-        <input type="number" id="jumlah" name="jumlah" value="1" min="1" required/>
-        <br><br>
-        <button type="submit" class="btn">Order Sekarang</button>
-    </form>
+        <form th:action="@{/cart/checkout-direct}" method="post">
+            <input type="hidden" name="menuId" th:value="${menu.id}"/>
+            <label for="jumlah">Jumlah:</label>
+            <input type="number" id="jumlah" name="jumlah" value="1" min="1" required/>
+            <br>
+            <button type="submit" class="btn btn-order">Order Sekarang</button>
+        </form>
 
-    <a href="/menu">Kembali ke Menu</a>
+        <a href="/menu" class="back-link">← Kembali ke Menu</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

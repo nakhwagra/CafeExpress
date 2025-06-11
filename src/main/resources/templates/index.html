@@ -4,103 +4,107 @@
     <meta charset="UTF-8">
     <title>Cafe Express</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-</head>
+    <link rel="stylesheet" href="/css/dashboard.css"> </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Cafe Express</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#" th:href="@{/}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/menu}">Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/order}">Order</a></li>
-                    <!-- Jika User BELUM Login -->
-                    <li class="nav-item" sec:authorize="isAnonymous()">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAnonymous()">
-                        <a class="nav-link" th:href="@{/register}">Register</a>
-                    </li>
-                    <!-- Jika User SUDAH Login -->
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" th:href="@{/profile}">Profile</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post" style="display:inline;">
-                        <button class="nav-link btn btn-link text-white text-decoration-none" style="padding: 0; border: none;" type="submit">Logout</button>
-                    </form>
-                    </li>
+    <header>
+        <h1>Cafe Express</h1>
+        <nav>
+            <a href="/" th:href="@{/}">Home</a>
+            <a href="/menu" th:href="@{/menu}">Menu</a>
+            <a href="/cart" th:href="@{/cart}" class="btn btn-outline-light ms-2">🛒</a>
 
+            <th:block sec:authorize="isAnonymous()">
+                <a href="/login" th:href="@{/login}">Login</a>
+                <a href="/register" th:href="@{/register}">Register</a>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-link text-white text-decoration-none">Logout</button>
+                </form>
+            </th:block>
+        </nav>
+    </header>
 
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-<div class="hero">
-    <h1 class="display-4 fw-bold">Homemade Coffee with Amazing Vibes</h1>
-    <p class="lead">Tempat terbaik untuk ngopi dan berbagi cerita.</p>
-    <a href="/menu" class="btn btn-custom btn-lg mt-3">Mulai Pesan Sekarang</a>
-</div>
-
-<!-- About Section -->
-<section class="container py-5">
-    <h2 class="section-title">About CAFE EXPRESS</h2>
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <img src="/images/cafe1.jpg" alt="Cafe" class="img-fluid rounded">
-        </div>
-        <div class="col-md-6">
-            <p>
-                Cafe Express adalah tempat di mana kamu bisa menikmati kopi berkualitas tinggi dengan suasana yang nyaman. 
-                Kami percaya bahwa setiap cangkir kopi membawa cerita.
-            </p>
-            <p>
-                Layanan kami tersedia online dan offline, siap melayani Anda di mana pun berada.
-            </p>
+    <div class="hero">
+        <video autoplay muted loop class="hero-video-background">
+            <source th:src="@{/videos/caffe.mp4}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="display-4 fw-bold">Homemade Coffee with Amazing Vibes</h1>
+            <p class="lead">Tempat terbaik untuk ngopi dan berbagi cerita.</p>
+            <a href="/menu" class="btn btn-custom btn-lg mt-3">Mulai Pesan Sekarang</a>
         </div>
     </div>
-</section>
 
-<!-- Services Section -->
-<section class="container py-5">
-    <h2 class="section-title text-center">Our Services</h2>
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="feature-card">
-                <img src="/images/panas.jpg" alt="Service 1" class="img-fluid mb-3 rounded">
-                <h5>Coffee Delivery</h5>
-                <p>Kopi panas langsung ke rumahmu dalam hitungan menit!</p>
+    <section class="container py-5">
+        <div class="row align-items-center mb-5 about-block-1">
+            <div class="col-md-6 text-center text-md-start">
+                <img src="/images/kopi.jpeg" alt="Coffee Bag" class="img-fluid rounded about-image">
+            </div>
+            <div class="col-md-6 text-center text-md-start">
+                <h2 class="about-block-title">Handmade Just For You</h2>
+                <p>
+                    For organically grown coffee beans are roasted over an open flame in a
+                    one-of-a-kind, tailor-made roaster. There's nothing quite like a cup of Cafe Express's
+                    coffee.
+                </p>
+                <a href="/menu" class="btn btn-custom mt-3">View Our Menu</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="feature-card">
-                <img src="/images/delivery.jpg" alt="Service 2" class="img-fluid mb-3 rounded">
-                <h5>Custom Orders</h5>
-                <p>Buat pesanan khusus sesuai keinginanmu.</p>
+
+        <div class="row align-items-center about-block-2">
+            <div class="col-md-6 order-md-2 text-center text-md-end">
+                <img src="/images/cafe1.jpeg" alt="Cafe Interior" class="img-fluid rounded about-image">
+            </div>
+            <div class="col-md-6 order-md-1 text-center text-md-start">
+                <h2 class="about-block-title">Made In Cafe Express</h2>
+                <p>
+                    Welcome to Cafe Express, where the charm of coffee meets the
+                    aroma of freshly brewed coffee. Our café is a cozy haven where friends
+                    gather, ideas spark, and every sip tells a story.
+                </p>
+                <p>
+                    Come and experience the soul of its roots in every cup and bite—we
+                    can't wait to welcome you!
+                </p>
+                <a href="#" class="btn btn-custom mt-3">Learn more</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="feature-card">
-                <img src="/images/cozy.jpg" alt="Service 3" class="img-fluid mb-3 rounded">
-                <h5>Cozy Cafe</h5>
-                <p>Nikmati suasana cafe modern yang nyaman dan hangat.</p>
+    </section>
+
+    <section class="container py-5">
+        <h2 class="section-title text-center">Our Services</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/images/ex.jpg" alt="Service 1" class="img-fluid mb-3 rounded">
+                    <h5>Coffee Delivery</h5>
+                    <p>Kopi panas langsung ke rumahmu dalam hitungan menit!</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/images/delivery.jpg" alt="Service 2" class="img-fluid mb-3 rounded">
+                    <h5>Custom Orders</h5>
+                    <p>Buat pesanan khusus sesuai keinginanmu.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/images/cozy.jpeg" alt="Service 3" class="img-fluid mb-3 rounded">
+                    <h5>Cozy Cafe</h5>
+                    <p>Nikmati suasana cafe modern yang nyaman dan hangat.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Footer -->
-<footer class="text-white text-center p-3">
-    &copy; 2025 Cafe Express. All rights reserved.
-</footer>
+    <footer class="text-white text-center p-3">
+        &copy; 2025 Cafe Express. All rights reserved.
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,30 +1,164 @@
+/* Styling Umum */
 body {
     background-color: #1e1e1e;
     color: #fff;
     font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-.about img {
-    max-width: 100%;
-    height: auto;
-    max-height: 400px;
-    border-radius: 10px;
-    object-fit: cover;
+/* ✅ START: KODE NAVBAR DARI MENU.CSS */
+header {
+    background-color: #343a40; /* Warna background navbar */
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between; /* Menjaga logo di kiri, nav di kanan */
+    align-items: center;
+    flex-wrap: wrap; /* Agar responsif */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Tambah shadow agar terlihat modern */
+    z-index: 1000; /* Pastikan di atas elemen lain */
+    position: relative; /* Penting untuk z-index */
 }
 
-.about .col-md-6 {
-    padding: 15px;
+header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: bold; /* Tambah bold agar mirip screenshot */
+    color: #ffffff; /* Pastikan warna teks putih */
 }
 
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Jarak antar item navbar */
+}
+
+header nav a,
+header nav button {
+    color: #ffffff; /* Warna link/tombol default */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    /* Tambahkan padding agar clickable area lebih besar */
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.25rem; /* Sedikit membulat */
+}
+
+header nav a:hover,
+header nav button:hover {
+    color: #ffc107; /* Warna hover kuning */
+    background-color: rgba(255, 193, 7, 0.1); /* Background transparan saat hover */
+}
+
+/* Untuk tombol Logout di dalam form, agar sejajar */
+header nav form {
+    display: flex; /* Membuat form menjadi flex container */
+    align-items: center; /* Memusatkan tombol secara vertikal */
+    padding: 0;
+    margin: 0;
+}
+
+header nav form button {
+    /* Menimpa padding yang sudah ada jika diperlukan */
+    padding: 0.5rem 0.8rem;
+    margin: 0; /* Pastikan tidak ada margin tambahan dari Bootstrap */
+}
+/* ✅ END: KODE NAVBAR DARI MENU.CSS */
+
+/* HERO SECTION (Background Video - Tetap sama) */
 .hero {
-    background: linear-gradient(135deg, #6f4e37, #a9746e); /* coffee brown gradient */
+    position: relative;
+    overflow: hidden;
     color: #f8f4f0;
     padding: 80px 20px;
     text-align: center;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.section-title {
-    color: #a9746e; /* light coffee */
+.hero-video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: brightness(50%);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #f8f4f0;
+    width: 100%;
+}
+
+/* ABOUT SECTION (Layout Baru - Tetap sama) */
+.about-block-1, .about-block-2 {
+    background-color: #2c2c2c;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.about-block-1 {
+    background-color: #3a3a3a;
+}
+
+.about-block-title {
+    color: #a9746e;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+}
+
+.about-block-1 .col-md-6,
+.about-block-2 .col-md-6 {
+    padding: 0 15px;
+}
+
+.about-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 767.98px) {
+    .about-block-1 .col-md-6:first-child,
+    .about-block-2 .col-md-6:last-child {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .about-block-1 .col-md-6:last-child,
+    .about-block-2 .col-md-6:first-child {
+        text-align: center;
+    }
+}
+
+/* SERVICE SECTION & BUTTONS */
+.section-title.text-center {
+    color: #a9746e;
     font-weight: 600;
     margin-bottom: 30px;
 }
@@ -67,14 +201,10 @@ body {
     transform: translateY(-5px);
 }
 
+/* Footer */
 footer {
     background-color: #121212;
-}
-
-.about-img {
-    max-width: 50%;
-    width: 100px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
 }

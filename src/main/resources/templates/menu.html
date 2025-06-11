@@ -1,224 +1,226 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Menu - Cafe Express</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/menu.css">
-
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> </head>
 <body>
-    <header>
-        <h1>Cafe Express</h1>
-        <nav>
-            <a href="/" th:href="@{/}">Home</a>
-            <a href="/menu" th:href="@{/menu}">Menu</a>
-            <a href="/cart" th:href"@{/cart}" class="btn btn-outline-light ms-2">🛒</a>
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-link text-white text-decoration-none" style="padding: 0; margin: 0; background: none; border: none;">Logout</button>
-            </form>
-
-        </nav>
-    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Cafe Express</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/menu}">Menu</a></li>
+                    <li class="nav-item">
+                        <a th:href="@{/cart}" class="nav-link">🛒</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post" class="logout-form">
+                            <button class="nav-link btn btn-link text-white text-decoration-none" type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <main class="container py-5">
-    <h2 class="text-center mb-4">Daftar Menu</h2>
+        <h2 class="text-center mb-5">Daftar Menu</h2>
 
-    <!-- Menu Favorit -->
-    <div class="section-box">
-        <h3 class="mb-3">🔥 Menu Favorit</h3>
-        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-            <div class="col" th:each="menu : ${favoritMenus}">
-                <div class="card h-100 shadow-sm border-danger">
-                    <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
-                        <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
-                        <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
-                        <div class="button-group">
-                            <button type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#detailModal"
-                                    th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-gambar=${menu.gambar}">
-                                Lihat Detail
-                            </button>
-                            <form th:action="@{/cart/add}" method="post">
-                                <input type="hidden" name="menuId" th:value="${menu.id}" />
-                                <button type="submit" class="btn btn-success">Add to Cart</button>
-                            </form>
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="input-group search-bar">
+                    <input type="text" class="form-control" id="menuSearchInput" placeholder="Cari menu berdasarkan nama...">
+                    <button class="btn btn-outline-secondary search-button" type="button" id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-pills mb-4 justify-content-center" id="menuKategoriTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="favorit-tab" data-bs-toggle="pill" data-bs-target="#favorit-content" type="button" role="tab" aria-controls="favorit-content" aria-selected="true">🔥 Favorit</button>
+            </li>
+            <li class="nav-item" role="presentation" th:each="kategori : ${kategoris}">
+                <button class="nav-link" th:id="${kategori.replaceAll(' ', '_')} + '-tab'" data-bs-toggle="pill" th:data-bs-target="'#' + ${kategori.replaceAll(' ', '_')} + '-content'" type="button" role="tab" th:aria-controls="${kategori.replaceAll(' ', '_')} + '-content'" aria-selected="false" th:text="${kategori}"></button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="menuKategoriTabContent">
+            <div class="tab-pane fade show active" id="favorit-content" role="tabpanel" aria-labelledby="favorit-tab">
+                <h3 class="mb-4">🔥 Menu Favorit</h3>
+                <div class="row row-cols-1 row-cols-md-3 g-4 menu-list"> <div class="col" th:each="menu : ${favoritMenus}">
+                        <div class="card h-100 shadow-sm clickable-card" th:data-menu-id="${menu.id}">
+                            <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
+                                <p class="card-text price" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
+                                <div class="button-group mt-3 justify-content-end">
+                                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                                        <input type="hidden" name="menuId" th:value="${menu.id}" />
+                                        <button type="submit" class="btn btn-success">+</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" th:each="entry : ${menuPerKategori}" th:id="${entry.key.replaceAll(' ', '_')} + '-content'" role="tabpanel" th:aria-labelledby="${entry.key.replaceAll(' ', '_')} + '-tab'">
+                <h3 class="mt-5 mb-4" th:text="${entry.key}">Kategori Nama</h3>
+                <div class="row row-cols-1 row-cols-md-3 g-4 menu-list"> <div class="col" th:each="menu : ${entry.value}">
+                        <div class="card h-100 shadow-sm clickable-card" th:data-menu-id="${menu.id}">
+                            <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
+                                <p class="card-text price" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
+                                <div class="button-group mt-3 justify-content-end">
+                                    <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                                        <input type="hidden" name="menuId" th:value="${menu.id}" />
+                                        <button type="submit" class="btn btn-success">+</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Navigasi Kategori -->
-    <div class="section-box kategori-nav">
-        <h4 class="mb-2">📌 Kategori</h4>
-        <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-outline-dark" th:each="kategori : ${kategoris}"
-               th:href="'#' + ${kategori.replaceAll(' ', '')}" th:text="${kategori}"></a>
-        </div>
-    </div>
-
-    <!-- Menu Berdasarkan Kategori -->
-    <div th:each="entry : ${menuPerKategori}" class="section-box">
-        <h3 class="mt-5 mb-3" th:attr="id=${entry.key.replaceAll(' ', '')}" th:text="${entry.key}"></h3>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col" th:each="menu : ${entry.value}">
-                <div class="card h-100 shadow-sm">
-                    <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
-                        <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
-                        <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button type="button" class="btn btn-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#detailModal"
-                                    th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-gambar=${menu.gambar}">
-                                Lihat Detail
-                            </button>
-                            <form th:action="@{/cart/add}" method="post">
-                                <input type="hidden" name="menuId" th:value="${menu.id}" />
-                                <button type="submit" class="btn btn-success">Add to Cart</button>
-                            </form>
-                        </div>
-                    </div>
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-light">
+                <div class="modal-header text-dark">
+                    <h5 class="modal-title" id="detailModalLabel">Detail Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <img id="modalGambar" src="" alt="Gambar Menu" class="img-fluid rounded mb-3 shadow" />
+                    <h5 id="modalNama" class="fw-bold"></h5>
+                    <p id="modalHarga" class="fw-semibold"></p>
+                    <p id="modalDeskripsi"></p>
+                </div>
+                <div class="modal-footer text-dark">
+                    <form th:action="@{/cart/add}" method="post" id="orderForm">
+                        <input type="hidden" name="menuId" id="modalMenuId" />
+                        <button type="submit" class="btn btn-success">+</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
-</main>
 
-<!-- Modal Detail -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-light">
-      <div class="modal-header text-dark">
-        <h5 class="modal-title" id="detailModalLabel">Detail Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-dark">
-        <img id="modalGambar" src="" alt="Gambar Menu" class="img-fluid rounded mb-3 shadow" />
-        <h5 id="modalNama" class="fw-bold"></h5>
-        <p id="modalHarga" class="fw-semibold"></p>
-        <p id="modalDeskripsi"></p>
-      </div>
-      <div class="modal-footer text-dark">
-        <form th:action="@{/cart/add}" method="post" id="orderForm">
-            <input type="hidden" name="menuId" id="modalMenuId" />
-            <button type="submit" class="btn btn-success">Add to Cart</button>
-        </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Logika untuk Modal Detail (jika masih digunakan, pastikan dipicu dengan benar)
+            var detailModal = document.getElementById('detailModal');
+            if (detailModal) {
+                detailModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    if (!button) {
+                        console.warn("Modal detail dipicu tanpa relatedTarget.");
+                        return;
+                    }
+                    var id = button.getAttribute('data-id');
+                    var nama = button.getAttribute('data-nama');
+                    var harga = button.getAttribute('data-harga');
+                    var deskripsi = button.getAttribute('data-deskripsi');
+                    var gambar = button.getAttribute('data-gambar');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var detailModal = document.getElementById('detailModal');
+                    document.getElementById('modalNama').textContent = nama;
+                    document.getElementById('modalHarga').textContent = 'Rp ' + harga;
+                    document.getElementById('modalDeskripsi').textContent = deskripsi;
+                    document.getElementById('modalGambar').src = '/images/' + gambar;
+                    document.getElementById('modalMenuId').value = id;
+                });
+            }
 
-        detailModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            if (!button) return;
+            // Logika JavaScript untuk klik kartu menu agar redirect ke halaman detail
+            document.querySelectorAll('.clickable-card').forEach(card => {
+                card.addEventListener('click', function(event) {
+                    const menuId = this.getAttribute('data-menu-id');
+                    if (menuId) {
+                        window.location.href = '/menu/' + menuId;
+                    }
+                });
+            });
 
-            var id = button.getAttribute('data-id');
-            var nama = button.getAttribute('data-nama');
-            var harga = button.getAttribute('data-harga');
-            var deskripsi = button.getAttribute('data-deskripsi');
-            var gambar = button.getAttribute('data-gambar');
+            // Mencegah klik pada tombol 'Add to Cart' menyebar dan memicu redirect kartu
+            document.querySelectorAll('.add-to-cart-form button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            });
 
-            document.getElementById('modalNama').textContent = nama;
-            document.getElementById('modalHarga').textContent = 'Rp ' + harga;
-            document.getElementById('modalDeskripsi').textContent = deskripsi;
-            document.getElementById('modalGambar').src = '/images/' + gambar;
-            document.getElementById('modalMenuId').value = id;
+            // Mengatur active tab saat halaman dimuat atau kategori diklik
+            var menuKategoriTabs = new bootstrap.Tab(document.getElementById('favorit-tab'));
+            menuKategoriTabs.show();
+
+            if (window.location.hash) {
+                const targetTabId = window.location.hash.substring(1).replace(/_/g, ' ') + '-tab';
+                const targetTab = document.getElementById(targetTabId.replaceAll(' ', '_'));
+                if (targetTab) {
+                    new bootstrap.Tab(targetTab).show();
+                    window.scrollTo(0, 0);
+                }
+            }
+
+            // ✅ START: LOGIKA SEARCH BAR
+            const menuSearchInput = document.getElementById('menuSearchInput');
+            const searchButton = document.getElementById('searchButton');
+            const menuListContainers = document.querySelectorAll('.menu-list'); // Kontainer daftar menu (row)
+
+            function filterMenus() {
+                const searchTerm = menuSearchInput.value.toLowerCase();
+                const activeTabContent = document.querySelector('.tab-pane.show.active'); // Konten tab yang sedang aktif
+
+                if (!activeTabContent) return;
+
+                const cardsInActiveTab = activeTabContent.querySelectorAll('.card');
+
+                cardsInActiveTab.forEach(card => {
+                    const menuName = card.querySelector('.card-title').textContent.toLowerCase();
+                    if (menuName.includes(searchTerm)) {
+                        card.closest('.col').style.display = 'block'; // Tampilkan kolom induk kartu
+                    } else {
+                        card.closest('.col').style.display = 'none'; // Sembunyikan kolom induk kartu
+                    }
+                });
+            }
+
+            // Event listener untuk input pencarian (saat user mengetik)
+            menuSearchInput.addEventListener('keyup', filterMenus);
+
+            // Event listener untuk tombol pencarian
+            searchButton.addEventListener('click', filterMenus);
+
+            // Reset filter saat tab kategori berubah
+            const tabButtons = document.querySelectorAll('#menuKategoriTabs .nav-link');
+            tabButtons.forEach(button => {
+                button.addEventListener('shown.bs.tab', function (event) {
+                    menuSearchInput.value = ''; // Kosongkan input search
+                    filterMenus(); // Terapkan filter ulang (ini akan menampilkan semua menu di tab baru)
+                });
+            });
+            // ✅ END: LOGIKA SEARCH BAR
         });
-    });
-</script>
+    </script>
 </body>
 </html>
-
-    {% comment %} <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" th:each="menu : ${menus}">
-            <div class="card h-100 shadow-sm">
-                <img th:src="@{'/images/' + ${menu.gambar}}" class="card-img-top" alt="gambar menu">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${menu.nama}">Nama Menu</h5>
-                    <p class="card-text" th:text="'Rp ' + ${menu.harga}">Rp 15000</p>
-                    <p class="card-text" th:text="${menu.deskripsi}">Deskripsi menu singkat.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-outline-light"
-                            data-bs-toggle="modal"
-                            data-bs-target="#detailModal"
-                            th:attr="data-id=${menu.id}, data-nama=${menu.nama}, data-harga=${menu.harga}, data-deskripsi=${menu.deskripsi}, data-gambar=${menu.gambar}">
-                            Lihat Detail
-                        </button>
-                        <form th:action="@{/cart/add}" method="post">
-                            <input type="hidden" name="menuId" th:value="${menu.id}" />
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- Modal -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-light">
-      <div class="modal-header text-dark">
-        <h5 class="modal-title" id="detailModalLabel">Detail Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-dark">
-        <img id="modalGambar" src="" alt="Gambar Menu" class="img-fluid rounded mb-3 shadow" />
-        <h5 id="modalNama" class="fw-bold"></h5>
-        <p id="modalHarga" class="fw-semibold"></p>
-        <p id="modalDeskripsi"></p>
-      </div>
-      <div class="modal-footer text-dark">
-        <form th:action="@{/cart/add}" method="post" id="orderForm">
-            <input type="hidden" name="menuId" id="modalMenuId" />
-            <button type="submit" class="btn btn-success">Add to Cart</button>
-        </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var detailModal = document.getElementById('detailModal')
-
-        detailModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget
-            if (!button) return; // antisipasi error jika button null
-
-            var id = button.getAttribute('data-id')
-            var nama = button.getAttribute('data-nama')
-            var harga = button.getAttribute('data-harga')
-            var deskripsi = button.getAttribute('data-deskripsi')
-            var gambar = button.getAttribute('data-gambar')
-
-            // Update konten modal
-            document.getElementById('modalNama').textContent = nama
-            document.getElementById('modalHarga').textContent = 'Rp ' + harga
-            document.getElementById('modalDeskripsi').textContent = deskripsi
-            document.getElementById('modalGambar').src = '/images/' + gambar
-            document.getElementById('modalMenuId').value = id;
-        })
-    })
-</script>
-</body>
-</html> {% endcomment %}

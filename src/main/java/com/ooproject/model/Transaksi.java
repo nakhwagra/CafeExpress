@@ -5,19 +5,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "transaksi") // Pastikan nama tabelnya 'transaksi' di DB
 public class Transaksi {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDateTime tanggal;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    // private Customer customer;
+    // ✅ Ganti dari 'Customer customer' menjadi 'User user'
+    @ManyToOne(fetch = FetchType.LAZY) // FetchType.LAZY disarankan
+    @JoinColumn(name = "user_id") // Pastikan nama kolom di DB Anda memang 'user_id'
+    private User user; // <-- Ini harus menunjuk ke model User Anda
 
     private Double total;
 
@@ -30,28 +30,24 @@ public class Transaksi {
     @Column(name = "metode_pembayaran", length = 50)
     private String metodePembayaran;
 
-    // + getter dan setter
-    
-
-
     // Constructors
     public Transaksi() {}
 
     public Transaksi(LocalDateTime tanggal, Double total) {
         this.tanggal = tanggal;
-        // this.customer = customer;
         this.total = total;
     }
 
-    // Getters & Setters
+    // Getters & Setters untuk semua properti
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public LocalDateTime getTanggal() { return tanggal; }
     public void setTanggal(LocalDateTime tanggal) { this.tanggal = tanggal; }
 
-    // public Customer getCustomer() { return customer; }
-    // public void setCustomer(Customer customer) { this.customer = customer; }
+    // ✅ Tambahkan getter dan setter untuk User
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public Double getTotal() { return total; }
     public void setTotal(Double total) { this.total = total; }

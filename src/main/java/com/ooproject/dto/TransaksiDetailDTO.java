@@ -11,6 +11,7 @@ public class TransaksiDetailDTO {
     private String namaMenu;
     private int jumlah;
     private String username;
+     private String menuDetails;
 
     // Constructor
     public TransaksiDetailDTO(Long transaksiId, LocalDateTime tanggal, Double total, String alamat,

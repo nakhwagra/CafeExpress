@@ -1,83 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Keranjang</title>
+    <title>Keranjang Anda</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/cart.css">
-</head>
+    <link rel="stylesheet" href="/css/dashboard.css"> <link rel="stylesheet" href="/css/cart.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Cafe Express</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/menu}">Menu</a></li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/menu}">Menu</a>
+                        <a th:href="@{/cart}" class="nav-link active">🛒</a> </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/cart}">Keranjang</a>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/register}">Register</a>
                     </li>
-                    <form th:action="@{/logout}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-link nav-link p-0 m-0" style="cursor: pointer;">Logout</button>
-                    </form>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post" class="logout-form">
+                            <button class="nav-link btn btn-link text-white text-decoration-none" type="submit">Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <!-- Konten Keranjang -->
     <div class="container mt-5">
-        <h2>Keranjang Anda</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Menu</th>
-                    <th>Harga</th>
-                    <th>Jumlah</th>
-                    <th>Total</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${cart}">
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <img th:src="@{'/images/' + ${item.menu.gambar}}" alt="Foto Menu" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />
-                            <span th:text="${item.menu.nama}">Nama Menu</span>
-                        </div>
-                    </td>
-                    <td>Rp <span th:text="${item.menu.harga}">15000</span></td>
-                    <td th:text="${item.jumlah}">1</td>
-                    <td>Rp <span th:text="${item.totalHarga}">15000</span></td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <form th:action="@{/cart/update}" method="post">
-                                <input type="hidden" name="menuId" th:value="${item.menu.id}" />
-                                <input type="hidden" name="action" value="decrease" />
-                                <button type="submit" class="btn btn-warning btn-sm">-</button>
-                            </form>
-                            <form th:action="@{/cart/update}" method="post">
-                                <input type="hidden" name="menuId" th:value="${item.menu.id}" />
-                                <input type="hidden" name="action" value="increase" />
-                                <button type="submit" class="btn btn-success btn-sm">+</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <h2 class="text-left mb-4">Keranjang Anda</h2>
 
-        <h4>Total Bayar: Rp <span th:text="${total}">0</span></h4>
-        <a th:href="@{/cart/checkout}" class="btn btn-primary">Checkout</a>
+        <div th:if="${cart.empty}" class="alert alert-info text-center cart-empty-message" role="alert">
+            Keranjang Anda kosong. Yuk, <a th:href="@{/menu}">jelajahi menu</a> kami!
+        </div>
+
+        <div th:unless="${cart.empty}">
+            <div class="cart-items-container">
+                <div class="cart-item-card" th:each="item : ${cart}">
+                    <div class="item-details">
+                        <img th:src="@{'/images/' + ${item.menu.gambar}}" alt="Foto Menu" class="item-image" />
+                        <div class="item-info">
+                            <h5 th:text="${item.menu.nama}">Nama Menu</h5>
+                            <span class="item-price">Rp <span th:text="${#numbers.formatDecimal(item.menu.harga, 0, 'POINT', 0, 'COMMA')}">15.000</span></span>
+                        </div>
+                    </div>
+
+                    <div class="item-quantity-control">
+                        <form th:action="@{/cart/update}" method="post">
+                            <input type="hidden" name="menuId" th:value="${item.menu.id}" />
+                            <input type="hidden" name="action" value="decrease" />
+                            <button type="submit" class="btn btn-quantity-minus">-</button>
+                        </form>
+                        <span class="quantity-display" th:text="${item.jumlah}">1</span>
+                        <form th:action="@{/cart/update}" method="post">
+                            <input type="hidden" name="menuId" th:value="${item.menu.id}" />
+                            <input type="hidden" name="action" value="increase" />
+                            <button type="submit" class="btn btn-quantity-plus">+</button>
+                        </form>
+                    </div>
+
+                    <div class="item-total">
+                        Rp <span th:text="${#numbers.formatDecimal(item.totalHarga, 0, 'POINT', 0, 'COMMA')}">15.000</span>
+                    </div>
+
+                    <div class="item-actions">
+                        <form th:action="@{/cart/remove}" method="post">
+                            <input type="hidden" name="menuId" th:value="${item.menu.id}" />
+                            <button type="submit" class="btn btn-remove-item"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary mt-4">
+                <div class="summary-total">
+                    <h3>Total Bayar: Rp <span th:text="${#numbers.formatDecimal(total, 0, 'POINT', 0, 'COMMA')}">0</span></h3>
+                </div>
+                <div class="summary-actions">
+                    <a th:href="@{/menu}" class="btn btn-secondary back-to-menu">← Kembali Ke Menu</a>
+                    <a th:href="@{/cart/checkout}" class="btn btn-primary checkout-button">Checkout</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Bootstrap JS (opsional, untuk navbar collapse di mobile) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -54,7 +54,6 @@
                             <th>Username</th>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,14 +61,6 @@
                             <td th:text="${user.username}">username</td>
                             <td th:text="${user.name}">Nama Lengkap</td>
                             <td th:text="${user.email}">email@example.com</td>
-                            <td>
-                                <!-- contoh tombol aksi, misal hapus user -->
-                                <form th:action="@{'/admin/users/delete/' + ${user.id}}" method="post" 
-                                    onsubmit="return confirm('Yakin ingin menghapus user ini?');">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                </form>
-                            </td>
                         </tr>
                     </tbody>
                 </table>

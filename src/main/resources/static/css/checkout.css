@@ -1,0 +1,133 @@
+/* Warna tema dark kopi (konsisten dengan file CSS lain) */
+:root {
+    --primary: #6f4e37;      /* coklat kopi */
+    --secondary: #d9b08c;    /* krem latte */
+    --accent: #a47148;       /* kayu */
+    --background: #1e1e1e;   /* Background gelap utama */
+    --card-bg: #2a2a2a;      /* Background untuk card/item */
+    --text-light: #ffffff;   /* Warna teks terang */
+    --text-muted: #ccc;      /* Warna teks pudar */
+    --border-color: #444;    /* Warna border */
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-light);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container utama (menggunakan Bootstrap .container) */
+.container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+/* Checkout Card */
+.checkout-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    max-width: 700px; /* Lebar maksimal untuk form checkout */
+    margin: 0 auto; /* Tengah secara horizontal */
+}
+
+h2 {
+    color: var(--text-light);
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+}
+
+/* Form Styling */
+.checkout-form .form-label {
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.checkout-form .form-control,
+.checkout-form .form-select {
+    background-color: #343a40;
+    border: 1px solid var(--border-color);
+    color: var(--text-light);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.checkout-form .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.checkout-form .form-control:focus,
+.checkout-form .form-select:focus {
+    background-color: #3e444b;
+    border-color: var(--primary);
+    color: var(--text-light);
+    box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25); /* Shadow fokus dengan warna primary */
+}
+
+/* Order Summary */
+.order-summary {
+    background-color: #3a3a3a; /* Warna latar belakang sedikit berbeda */
+    color: var(--text-light);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}
+
+.order-summary h4 {
+    margin: 0;
+    color: var(--secondary);
+    font-weight: 700;
+}
+
+.order-summary .total-amount {
+    font-size: 2rem; /* Ukuran total lebih besar */
+    color: var(--text-light);
+}
+
+/* Buttons */
+.pesan-sekarang-button {
+    background-color: var(--primary);
+    border: none;
+    color: var(--text-light);
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: background-color 0.2s ease-in-out;
+    width: 100%; /* Tombol lebar penuh */
+}
+.pesan-sekarang-button:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+.kembali-ke-keranjang-button {
+    background-color: transparent;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    width: 100%; /* Tombol lebar penuh */
+}
+.kembali-ke-keranjang-button:hover {
+    background-color: var(--text-muted);
+    color: var(--card-bg);
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    .checkout-card {
+        padding: 20px;
+    }
+    .order-summary .total-amount {
+        font-size: 1.5rem;
+    }
+}
