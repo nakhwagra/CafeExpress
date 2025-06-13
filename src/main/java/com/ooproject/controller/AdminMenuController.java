@@ -34,10 +34,29 @@ public class AdminMenuController {
 
     // Tampilkan halaman kelola menu
     @GetMapping
-    public String showMenuPage(Model model) {
-        List<Menu> menus = menuRepository.findAll();
+    public String showMenuPage(@RequestParam(required = false) String favorite,
+                            @RequestParam(required = false) String kategori,
+                            Model model) {
+        List<Menu> menus;
+
+        boolean hasFavorite = favorite != null && !favorite.isEmpty();
+        boolean hasKategori = kategori != null && !kategori.isEmpty();
+
+        if (!hasFavorite && !hasKategori) {
+            menus = menuRepository.findAll();
+        } else if (hasFavorite && !hasKategori) {
+            menus = menuRepository.findByFavorite(FavoriteStatus.valueOf(favorite));
+        } else if (!hasFavorite && hasKategori) {
+            menus = menuRepository.findByKategori(Kategori.valueOf(kategori));
+        } else {
+            menus = menuRepository.findByFavoriteAndKategori(
+                FavoriteStatus.valueOf(favorite),
+                Kategori.valueOf(kategori)
+            );
+        }
+
         model.addAttribute("menus", menus);
-        return "admin_menu"; // Sesuaikan dengan nama file HTML kamu
+        return "admin_menu"; // nama file HTML
     }
 
     // Handle form tambah menu (POST)

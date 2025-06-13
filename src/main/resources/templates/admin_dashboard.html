@@ -27,6 +27,7 @@
             <h2 class="mb-4">Dashboard Admin</h2>
 
             <div class="row">
+                <!-- Kartu Kelola Menu -->
                 <div class="col-md-6 mb-3">
                     <div class="card border-success shadow-sm">
                         <div class="card-body">
@@ -37,6 +38,7 @@
                     </div>
                 </div>
 
+                <!-- Kartu Lihat Transaksi -->
                 <div class="col-md-6 mb-3">
                     <div class="card border-primary shadow-sm">
                         <div class="card-body">
@@ -46,28 +48,34 @@
                         </div>
                     </div>
                 </div>
-                <!-- bagian ini ditambahkan di dalam div #page-content-wrapper, setelah row transaksi -->
-                <h3 class="mt-5 mb-3">Daftar User</h3>
-                <table class="table table-striped table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Username</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="user : ${users}">
-                            <td th:text="${user.username}">username</td>
-                            <td th:text="${user.name}">Nama Lengkap</td>
-                            <td th:text="${user.email}">email@example.com</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-    </div>
+                <!-- Daftar User -->
+                <div class="col-12">
+                    <h3 class="mt-5 mb-3">Daftar User</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user : ${users}">
+                                        <td th:text="${user.username}">username</td>
+                                        <td th:text="${user.name}">Nama Lengkap</td>
+                                        <td th:text="${user.email}">email@example.com</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- /row -->
+        </div> <!-- /page-content-wrapper -->
+    </div> <!-- /wrapper -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

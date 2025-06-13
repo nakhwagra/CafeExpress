@@ -1,0 +1,109 @@
+/* === General === */
+body {
+    background-color: #f8f5f2;
+    color: #3e2f1c;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h2, h4 {
+    color: #6f4e37;
+}
+
+/* === Navbar === */
+.navbar {
+    background-color: #6f4e37 !important;
+}
+
+.navbar .navbar-brand,
+.navbar .btn-outline-light {
+    color: #fff;
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: #fff;
+    color: #6f4e37;
+}
+
+/* === Table === */
+.table {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+}
+
+.table thead {
+    background-color: #d9c2a3;
+    color: #3e2f1c;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* === Buttons === */
+.btn-outline-primary {
+    color: #6f4e37;
+    border-color: #6f4e37;
+}
+
+.btn-outline-primary:hover {
+    background-color: #6f4e37;
+    color: #fff;
+}
+
+.btn-outline-warning {
+    color: #b26e00;
+    border-color: #b26e00;
+}
+
+.btn-outline-warning:hover {
+    background-color: #b26e00;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    color: #912c2c;
+    border-color: #912c2c;
+}
+
+.btn-outline-danger:hover {
+    background-color: #912c2c;
+    color: #fff;
+}
+
+/* Icon-only buttons */
+.btn i {
+    pointer-events: none;
+}
+
+/* === Form === */
+.form-control:focus,
+.form-select:focus {
+    border-color: #6f4e37;
+    box-shadow: 0 0 0 0.2rem rgba(111, 78, 55, 0.25);
+}
+
+/* === Image Thumbnail === */
+.img-thumbnail {
+    border: 2px solid #d9c2a3;
+    background-color: #fffaf6;
+    padding: 4px;
+}
+
+/* === Form Section === */
+#edit-form,
+form {
+    background-color: #fff;
+    border: 1px solid #e4dcd4;
+    border-radius: 0.5rem;
+}
+
+#edit-form {
+    margin-top: 20px;
+}
+
+/* === Utility === */
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075) !important;
+}

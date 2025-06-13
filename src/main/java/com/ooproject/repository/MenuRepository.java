@@ -8,4 +8,5 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<Menu, Long> {
     List<Menu> findByFavorite(FavoriteStatus favorite);
     List<Menu> findByKategori(Kategori kategori);
+    List<Menu> findByFavoriteAndKategori(FavoriteStatus favorite, Kategori kategori);
 }

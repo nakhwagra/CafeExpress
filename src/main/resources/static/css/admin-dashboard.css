@@ -1,65 +1,110 @@
-/* Wrapper utama */
+/* ===== Layout Umum ===== */
+body {
+    background-color: #f8f4f0;
+    font-family: 'Segoe UI', sans-serif;
+    color: #3e2723;
+}
+
 #wrapper {
     min-height: 100vh;
     overflow-x: hidden;
+    display: flex;
 }
 
-/* Sidebar */
+/* ===== Sidebar ===== */
 #sidebar-wrapper {
-    width: 220px;
+    width: 240px;
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
+    background-color: #4e342e; /* Coklat gelap */
+    color: white;
     z-index: 1000;
 }
 
-/* Heading sidebar */
 #sidebar-wrapper .sidebar-heading {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background-color: #3e2723;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Link sidebar */
 #sidebar-wrapper .list-group-item {
+    background: transparent;
+    color: white;
     border: none;
-    padding: 20px 30px;
-    font-size: 1.1rem;
-    transition: background-color 0.2s ease;
+    font-weight: 500;
+    padding: 16px 24px;
+    transition: background 0.2s ease;
 }
 
-#sidebar-wrapper .list-group-item:hover {
-    background-color: #495057;
+#sidebar-wrapper .list-group-item:hover,
+#sidebar-wrapper .list-group-item:focus {
+    background-color: #6d4c41;
     color: #fff;
-    cursor: pointer;
 }
 
-/* Konten utama */
+/* ===== Konten utama ===== */
 #page-content-wrapper {
-    margin-left: 220px;
+    margin-left: 240px;
+    padding: 30px;
+    width: 100%;
+    background-color: #fff3e0;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Card style */
+/* ===== Card ===== */
 .card {
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive */
+.card.border-success {
+    border-color: #6d9e66 !important;
+}
+
+.card.border-primary {
+    border-color: #8d6e63 !important;
+}
+
+/* ===== Tabel User ===== */
+table.table {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.table th {
+    background-color: #4e342e;
+    color: #fff;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #fef7f1;
+}
+
+/* ===== Responsive Sidebar ===== */
 @media (max-width: 768px) {
     #sidebar-wrapper {
         position: relative;
         width: 100%;
         height: auto;
     }
+
     #page-content-wrapper {
         margin-left: 0;
+        border-radius: 0;
     }
 }
 
-/* Tombol logout full width di mobile */
 @media (max-width: 576px) {
     #sidebar-wrapper .btn {
         width: 100% !important;
-    }
+    }
 }
-
